@@ -1,8 +1,4 @@
-# dockingBays.py
-
-# List of docking bays at the space station
 # Each bay is represented as a dictionary with an ID, size, and current schedule
-
 # Sizes can be 'small', 'medium', 'large'
 
 docking_bays = [
