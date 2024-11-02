@@ -24,17 +24,15 @@ def updating_schedule():
     for ship in db.incoming_ships:
         bay = available(ship) -1
         detail = (ship['arrival_time'], ship['departure_time'], ship['ship_name'])
-        index = -1
-        for num in range(len(db.docking_bays[bay]['schedule'])-1):
-            if get_time(ship['arrival_time']) < get_time(db.docking_bays[bay]['schedule'][num][0]):
-                index = num
-                break
-        if index > -1:
-            db.docking_bays[bay]['schedule'].insert(index, detail)
-        else:
-            db.docking_bays[bay]['schedule'].append(detail)
+        db.docking_bays[bay]['schedule'].append(detail)
+
+def organize_schedule():
+    for bay in db.docking_bays:
+        result = []
+        for num in range(len(bay['schedule'])):
 
 # Function to check the bays available for the ships based on size and time.
+## Note: I did it small to small, medium to medium, and large to large.
 def available(ship):
     filtered_size = []
     for bay in db.docking_bays:
