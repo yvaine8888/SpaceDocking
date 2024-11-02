@@ -18,7 +18,7 @@ def main():
     print_incoming_ships()
     updating_schedule()
     print()
-    print_docking_bays()
+    print_schedule()
     
     # TODO: Implement the docking scheduler logic here
     # Levels 1 to 4 and the bonus can be implemented below
@@ -35,14 +35,14 @@ def available(ship):
             filtered_size.append(bay)
 
     filtered_time = []
-    new_arrival = get_hour(ship['arrival_time'])
-    new_depart = get_hour(ship['departure_time'])
+    new_arrival = get_time(ship['arrival_time'])
+    new_depart = get_time(ship['departure_time'])
 
     for bay in filtered_size:
         can = True
         for schedule in bay['schedule']:
-            current_arrival = get_hour(schedule[0])
-            current_depart = get_hour(schedule[1])
+            current_arrival = get_time(schedule[0])
+            current_depart = get_time(schedule[1])
             if new_arrival < current_depart and current_arrival < new_depart:
                 can = False
         if can:
@@ -50,17 +50,61 @@ def available(ship):
     return filtered_time[0]
 
 
-def get_hour(s):
+def get_time(s):
     index = 0
-    for num in range(len(s)):
+    for num in range(len(s)-1):
         if s[num] == ':':
             index = num
-    s = s[:index]
-    s = int(s)
+    s = s[:index] + '.' + s[index+1:]
+    s = float(s)
     return s
 
-    
+def turn_back_time(s, old):
+    index = 0
+    s = str(s)
+    for num in range(len(s)-1):
+        if s[num] == '.':
+            index = num
+    s = s[:index] + ':' + s[index+1:]
+    if old[4] == '0':
+        s = s + '0'
+    return s
 
+def print_schedule():
+    print("Docking Bays:")
+    for bay in db.docking_bays:
+        print(f"Bay {bay['bay_id']}: ", end = "")
+        for ship in bay['schedule']:
+            arrival = get_time(ship[0])
+            depart = get_time(ship[1])
+            arr_period = ''
+            dep_period = ''
+            if arrival < 12 or arrival == 24.00:
+                arr_period = 'AM'
+            else:
+                arr_period = 'PM'
+
+            if depart < 12 or depart == 24.00:
+                dep_period = 'AM'
+            else:
+                dep_period = 'PM'
+
+            if arrival >= 13:
+                arrival = arrival - 12
+
+            if depart >= 13:
+                depart = depart - 12
+            
+            arrival = turn_back_time(arrival, ship[0])
+            depart = turn_back_time(depart, ship[1])
+            
+            ending = ""
+            if ship != bay['schedule'][len(bay['schedule'])-1]:
+                ending = ", "
+
+            print(f"{ship[2]} - {arrival} {arr_period} to {depart} {dep_period}", end = ending)
+
+        print()
 
 if __name__ == "__main__":
     main()
