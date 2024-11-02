@@ -17,6 +17,7 @@ def main():
     print_docking_bays()
     print_incoming_ships()
     updating_schedule()
+    organize_schedule()
     print_schedule()
 
 # Function to update the schedule to accomodate the incoming ships
@@ -30,6 +31,17 @@ def organize_schedule():
     for bay in db.docking_bays:
         result = []
         for num in range(len(bay['schedule'])):
+            added_ship = bay['schedule'][0]
+            min = get_time(added_ship[0])
+            for ship in bay['schedule']:
+                if get_time(ship[0]) < min:
+                    min = get_time(ship[0])
+                    added_ship = ship
+            result.append(added_ship)
+            bay['schedule'].remove(added_ship)
+        bay['schedule'] = result
+            
+
 
 # Function to check the bays available for the ships based on size and time.
 ## Note: I did it small to small, medium to medium, and large to large.
