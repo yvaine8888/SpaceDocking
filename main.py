@@ -28,7 +28,7 @@ def updating_schedule():
         detail = (ship['arrival_time'], ship['departure_time'], ship['ship_name'])
         db.docking_bays[bay]['schedule'].append(detail)
 
-# Function to check the bays available for the ships based on size and time.
+# Function to check the bays available for the ships based on size and time and return it.
 ## Note: I did it small to small, medium to medium, and large to large.
 def available(ship):
     filtered_size = []
@@ -51,7 +51,7 @@ def available(ship):
             filtered_time.append(bay['bay_id'])
     return filtered_time[0]
 
-# Function to turn time into decimal. Ex. 12:30 = 12.3
+# Function to turn time into decimal and return it. Ex. 12:30 = 12.3
 def get_time(s):
     index = 0
     for num in range(len(s)):
@@ -63,7 +63,7 @@ def get_time(s):
     return s
 
 
-# Function to turn decimal into time. Ex. 12.3 = 12:30
+# Function to turn decimal into time and return it. Ex. 12.3 = 12:30
 def turn_back_time(s, old):
     index = 0
     s = str(s)
