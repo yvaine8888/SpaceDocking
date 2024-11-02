@@ -103,7 +103,6 @@ def print_schedule():
                 ending = ", "
 
             print(f"{ship[2]} - {arrival} {arr_period} to {depart} {dep_period}", end = ending)
-
         print()
 
 if __name__ == "__main__":

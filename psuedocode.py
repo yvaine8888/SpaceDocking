@@ -13,6 +13,9 @@ new function that updates schedule
             returns the first bay (the others would be for if I attempt level 4)
         still inside the for loop of the first function, update the schedule by appending
 call the bonus
+inside the bonus
+    for loop the bays then the schedules
+    convert the time to human time then print it out
             
 '''
 
