@@ -1,4 +1,5 @@
 import dockingBays as db
+# Note: I used W3Schools to figure out append, end in print statement, and remove.
 
 # Function to print docking bays information
 def print_docking_bays():
@@ -23,25 +24,9 @@ def main():
 # Function to update the schedule to accomodate the incoming ships
 def updating_schedule():
     for ship in db.incoming_ships:
-        bay = available(ship) -1
+        bay = available(ship) - 1 
         detail = (ship['arrival_time'], ship['departure_time'], ship['ship_name'])
         db.docking_bays[bay]['schedule'].append(detail)
-
-def organize_schedule():
-    for bay in db.docking_bays:
-        result = []
-        for num in range(len(bay['schedule'])):
-            added_ship = bay['schedule'][0]
-            min = get_time(added_ship[0])
-            for ship in bay['schedule']:
-                if get_time(ship[0]) < min:
-                    min = get_time(ship[0])
-                    added_ship = ship
-            result.append(added_ship)
-            bay['schedule'].remove(added_ship)
-        bay['schedule'] = result
-            
-
 
 # Function to check the bays available for the ships based on size and time.
 ## Note: I did it small to small, medium to medium, and large to large.
@@ -69,35 +54,60 @@ def available(ship):
 # Function to turn time into decimal. Ex. 12:30 = 12.3
 def get_time(s):
     index = 0
-    for num in range(len(s)-1):
+    for num in range(len(s)):
         if s[num] == ':':
             index = num
+
     s = s[:index] + '.' + s[index+1:]
     s = float(s)
     return s
 
-# Function to turn decimcal into time. Ex. 12.3 = 12:30
+
+# Function to turn decimal into time. Ex. 12.3 = 12:30
 def turn_back_time(s, old):
     index = 0
     s = str(s)
-    for num in range(len(s)-1):
+    for num in range(len(s)):
         if s[num] == '.':
             index = num
+
     s = s[:index] + ':' + s[index+1:]
     if old[4] == '0':
         s = s + '0'
     return s
+
+# Function to organize the schedule based on time
+def organize_schedule():
+    for bay in db.docking_bays:
+        result = []
+
+        for num in range(len(bay['schedule'])):
+            added_ship = bay['schedule'][0]
+            min = get_time(added_ship[0])
+            
+            for ship in bay['schedule']:
+                if get_time(ship[0]) < min:
+                    min = get_time(ship[0])
+                    added_ship = ship
+
+            result.append(added_ship)
+            bay['schedule'].remove(added_ship)
+
+        bay['schedule'] = result
+
 
 # Function to print the new schedule in a human-readable format.
 def print_schedule():
     print("\nSchedule")
     for bay in db.docking_bays:
         print(f"Bay {bay['bay_id']}: ", end = "")
+        
         for ship in bay['schedule']:
             arrival = get_time(ship[0])
             depart = get_time(ship[1])
             arr_period = ''
             dep_period = ''
+            
             if arrival < 12 or arrival == 24.00:
                 arr_period = 'AM'
             else:
@@ -123,5 +133,6 @@ def print_schedule():
 
             print(f"{ship[2]} - {arrival} {arr_period} to {depart} {dep_period}", end = ending)
         print()
+
 if __name__ == "__main__":
     main()
