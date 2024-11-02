@@ -2,13 +2,13 @@ import dockingBays as db
 
 # Function to print docking bays information
 def print_docking_bays():
-    print("Docking Bays:")
+    print("Docking Bays")
     for bay in db.docking_bays:
         print(f"Bay {bay['bay_id']} - Size: {bay['size']}, Schedule: {bay['schedule']}")
 
 # Function to print incoming ships information
 def print_incoming_ships():
-    print("\nIncoming Ships:")
+    print("\nIncoming Ships")
     for ship in db.incoming_ships:
         print(f"Ship {ship['ship_name']} - Size: {ship['size']}, Arrival: {ship['arrival_time']}, Departure: {ship['departure_time']}")
 
@@ -17,17 +17,24 @@ def main():
     print_docking_bays()
     print_incoming_ships()
     updating_schedule()
-    print()
     print_schedule()
-    
-    # TODO: Implement the docking scheduler logic here
-    # Levels 1 to 4 and the bonus can be implemented below
+
+# Function to update the schedule to accomodate the incoming ships
 def updating_schedule():
     for ship in db.incoming_ships:
         bay = available(ship) -1
         detail = (ship['arrival_time'], ship['departure_time'], ship['ship_name'])
-        db.docking_bays[bay]['schedule'].append(detail)
+        index = -1
+        for num in range(len(db.docking_bays[bay]['schedule'])-1):
+            if get_time(ship['arrival_time']) < get_time(db.docking_bays[bay]['schedule'][num][0]):
+                index = num
+                break
+        if index > -1:
+            db.docking_bays[bay]['schedule'].insert(index, detail)
+        else:
+            db.docking_bays[bay]['schedule'].append(detail)
 
+# Function to check the bays available for the ships based on size and time.
 def available(ship):
     filtered_size = []
     for bay in db.docking_bays:
@@ -49,7 +56,7 @@ def available(ship):
             filtered_time.append(bay['bay_id'])
     return filtered_time[0]
 
-
+# Function to turn time into decimal. Ex. 12:30 = 12.3
 def get_time(s):
     index = 0
     for num in range(len(s)-1):
@@ -59,6 +66,7 @@ def get_time(s):
     s = float(s)
     return s
 
+# Function to turn decimcal into time. Ex. 12.3 = 12:30
 def turn_back_time(s, old):
     index = 0
     s = str(s)
@@ -70,8 +78,9 @@ def turn_back_time(s, old):
         s = s + '0'
     return s
 
+# Function to print the new schedule in a human-readable format.
 def print_schedule():
-    print("Docking Bays:")
+    print("\nSchedule")
     for bay in db.docking_bays:
         print(f"Bay {bay['bay_id']}: ", end = "")
         for ship in bay['schedule']:
@@ -104,6 +113,5 @@ def print_schedule():
 
             print(f"{ship[2]} - {arrival} {arr_period} to {depart} {dep_period}", end = ending)
         print()
-
 if __name__ == "__main__":
     main()
