@@ -1,5 +1,7 @@
 import dockingBays as db
+import itertools
 # Note: I used W3Schools to figure out append, end in print statement, and remove.
+# I also found out about itertools from GeeksforGeeks.
 
 # Function to print docking bays information
 def print_docking_bays():
@@ -27,35 +29,51 @@ def updating_schedule():
         bay = available(ship) - 1 
         detail = (ship['arrival_time'], ship['departure_time'], ship['ship_name'])
         db.docking_bays[bay]['schedule'].append(detail)"""
-    available_times = []
+    
+    max_bays = 0
+    available_bay = []
     for ship in db.incoming_ships:
-        available_times.append(available(ship))
-    paths = []
-    for list in available_times:
+        size = available_size(ship)
+        if len(size) > max_bays:
+            max_bays = len(size)
+        available_bay.append(size)
+
+    possibilities = []
+    for num in range(max_bays):
+        possibilities.append(num)
+    paths = list(itertools.product(possibilities, repeat=len(db.incoming_ships)))
+
+    fake_schedule = 
+
+    for path in paths:
+        for num, bay in path:
+
+
+    
+
         
 
 # Function to check the bays available for the ships based on size and time and return it.
 ## Note: I did it small to small, medium to medium, and large to large.
-def available(ship):
+def available_size(ship):
     filtered_size = []
     for bay in db.docking_bays:
         if bay['size'] == ship['size']:
             filtered_size.append(bay)
-
+    return filtered_size
+    
+def available_time(bay):
     filtered_time = []
     new_arrival = get_time(ship['arrival_time'])
     new_depart = get_time(ship['departure_time'])
 
-    for num, bay in enumerate(filtered_size):
-        can = True
-        for schedule in bay['schedule']:
-            current_arrival = get_time(schedule[0])
-            current_depart = get_time(schedule[1])
-            if new_arrival < current_depart and current_arrival < new_depart:
-                can = False
-        if can:
-            filtered_time.append(num)
-    return filtered_time
+    can = True
+    for schedule in bay['schedule']:
+        current_arrival = get_time(schedule[0])
+        current_depart = get_time(schedule[1])
+        if new_arrival < current_depart and current_arrival < new_depart:
+            can = False
+    return can
 
 # Function to turn time into decimal and return it. Ex. 12:30 = 12.3
 def get_time(s):

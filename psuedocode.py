@@ -17,6 +17,10 @@ Note* This if I attempt level 4:
     gets all the available paths
     gets all the times between and empty for all the paths
     choose the best one
+    implement it
+
+    first I would need to separate the size and time checker to get paths so that 
+    when I get the paths, I can check if they are available and eliminate
 
 
 inside the function that gets :
