@@ -23,10 +23,16 @@ def main():
 
 # Function to update the schedule to accomodate the incoming ships
 def updating_schedule():
-    for ship in db.incoming_ships:
+    """for ship in db.incoming_ships:
         bay = available(ship) - 1 
         detail = (ship['arrival_time'], ship['departure_time'], ship['ship_name'])
-        db.docking_bays[bay]['schedule'].append(detail)
+        db.docking_bays[bay]['schedule'].append(detail)"""
+    available_times = []
+    for ship in db.incoming_ships:
+        available_times.append(available(ship))
+    paths = []
+    for list in available_times:
+        
 
 # Function to check the bays available for the ships based on size and time and return it.
 ## Note: I did it small to small, medium to medium, and large to large.
@@ -40,7 +46,7 @@ def available(ship):
     new_arrival = get_time(ship['arrival_time'])
     new_depart = get_time(ship['departure_time'])
 
-    for bay in filtered_size:
+    for num, bay in enumerate(filtered_size):
         can = True
         for schedule in bay['schedule']:
             current_arrival = get_time(schedule[0])
@@ -48,14 +54,14 @@ def available(ship):
             if new_arrival < current_depart and current_arrival < new_depart:
                 can = False
         if can:
-            filtered_time.append(bay['bay_id'])
-    return filtered_time[0]
+            filtered_time.append(num)
+    return filtered_time
 
 # Function to turn time into decimal and return it. Ex. 12:30 = 12.3
 def get_time(s):
     index = 0
-    for num in range(len(s)):
-        if s[num] == ':':
+    for num, letter in enumerate(s):
+        if letter == ':':
             index = num
 
     s = s[:index] + '.' + s[index+1:]
@@ -67,8 +73,8 @@ def get_time(s):
 def turn_back_time(s, old):
     index = 0
     s = str(s)
-    for num in range(len(s)):
-        if s[num] == '.':
+    for num, letter in enumerate(s):
+        if letter == '.':
             index = num
 
     s = s[:index] + ':' + s[index+1:]

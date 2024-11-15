@@ -1,28 +1,40 @@
 '''
 starter project
-new function that updates schedule
+in the main:
+    update
+    organize
+    print
+
+function that updates schedule
     for each upcoming ship:
-        calls the function that gets the available bays for the ship
-        inside the function:
-            use for loop to check size of each bay
-                adds bays to a list
-            then it checks if the time is available by using the list of bays (for loop)
-            by comparing the maximum to mininum to all the things already on the schedule
-                To do that, I need a for loop and something that returns the first two as int
-                adds to another list
-            returns the first bay (the others would be for if I attempt level 4)
-        still inside the for loop of the first function, update the schedule by appending
+        get the available bays for the ship
+        update the schedule by appending
+
+Note* This if I attempt level 4:
+    The function that update schedule
+    for each upcoming ship:
+        call the function that gets the available bays for the ship
+    gets all the available paths
+    gets all the times between and empty for all the paths
+    choose the best one
+
+
+inside the function that gets :
+    use for loop to check size of each bay
+        adds bays to a list
+    checks if the time is available using the list by comparing the maximum 
+    to mininum to all the things already on the schedule
+        adds to another list
+    returns the first bay (the others would be for if I attempt level 4)
         
-call organizing schedule
-inside:
+organizing schedule inside:
     for loop every bay:
         add the min (to find need for loop) to a new list
         remove it from the current schedule
         repeat until current is empty
         then assign the new list to the current
 
-call the bonus
-inside the bonus
+bonus inside:
     for loop the bays then the schedules
     convert the time to human time then print it out
 
